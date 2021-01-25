@@ -1,5 +1,7 @@
 import pygame
 import random
+import pickle
+
 #https://stackoverflow.com/questions/23893978/keeping-high-scores-in-a-text-file für highscore
 pygame.init()
 pygame.display.set_caption("Snake")
@@ -52,6 +54,20 @@ class Snake:
         self.boolSavingMovingDirection = False
         self.score = 0
         self.failSoundPlayed = False
+
+    def getHighscorePickle(self):
+        highscoreLoad = pickle.load(open( "save.p", "rb" ) )
+
+        for item in highscoreLoad:
+            highscoreNew = item
+
+        return int(highscoreNew)
+
+    def setHighscorePickle(self):
+        highscoreOld = self.getHighscorePickle()
+        if highscoreOld < self.score:
+            highscore = {self.score}
+            pickle.dump( highscore, open( "save.p", "wb" ))
 
     def getHighscore(self):
         file1 = open("highscores.txt","r")
@@ -160,7 +176,7 @@ class Snake:
                 snake.updateBodyParts(False)
             apple.show()
         else:
-            self.setHighscore()
+            self.setHighscorePickle()
             if not self.failSoundPlayed:
                 failsound.play()
                 self.failSoundPlayed = True
@@ -172,7 +188,7 @@ class Snake:
             apple.show()
             drawRectWithFrame(WIDTH //2-90,HEIGHT//2-30, 200,110, BLACK, WHITE)
             printOnScreen('Game Over!', WHITE, WIDTH //2-85, HEIGHT//2-20, 32)
-            printOnScreen('Highscore: ' + str(self.getHighscore()), WHITE, WIDTH //2-60, HEIGHT//2+20, 20)
+            printOnScreen('Highscore: ' + str(self.getHighscorePickle()), WHITE, WIDTH //2-60, HEIGHT//2+20, 20)
             printOnScreen('Score: ' + str(self.score), WHITE, WIDTH //2-40, HEIGHT//2+50, 20)
 
         
@@ -194,6 +210,11 @@ snake = Snake(150, HEIGHT//2, SNAKEWIDTH) # starting point has to be % 15 == 0 !
 apple = Apple(SNAKEWIDTH)
 
 run = True
+
+#To reset the highscore, uncommand the following code :
+"""pickleFirstEntry = {0}
+pickle.dump( pickleFirstEntry , open( "save.p", "wb" ))"""
+
 while run:
     #drawing a red line grid system for testing the movement of the snake
     """for w in range (WIDTH+10):
