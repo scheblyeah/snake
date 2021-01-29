@@ -5,9 +5,9 @@ import pickle
 #https://stackoverflow.com/questions/23893978/keeping-high-scores-in-a-text-file für highscore
 pygame.init()
 pygame.display.set_caption("Snake")
-biteSound = pygame.mixer.Sound('bite.wav')
-failsound = pygame.mixer.Sound('fail.wav')
-applePicture = pygame.image.load('applegood.png')
+biteSound = pygame.mixer.Sound('gamedata/bite.wav')
+failsound = pygame.mixer.Sound('gamedata/fail.wav')
+applePicture = pygame.image.load('gamedata/applegood.png')
 
 
 WIDTH = 600
@@ -56,7 +56,7 @@ class Snake:
         self.failSoundPlayed = False
 
     def getHighscorePickle(self):
-        highscoreLoad = pickle.load(open( "save.p", "rb" ) )
+        highscoreLoad = pickle.load(open( "gamedata/save.p", "rb" ) )
 
         for item in highscoreLoad:
             highscoreNew = item
@@ -67,7 +67,7 @@ class Snake:
         highscoreOld = self.getHighscorePickle()
         if highscoreOld < self.score:
             highscore = {self.score}
-            pickle.dump( highscore, open( "save.p", "wb" ))
+            pickle.dump( highscore, open( "gamedata/save.p", "wb" ))
 
     def getHighscore(self):
         file1 = open("highscores.txt","r")
@@ -213,7 +213,7 @@ run = True
 
 #To reset the highscore, uncommand the following code :
 """pickleFirstEntry = {0}
-pickle.dump( pickleFirstEntry , open( "save.p", "wb" ))"""
+pickle.dump( pickleFirstEntry , open( "save.p", "wb" ))""" 
 
 while run:
     #drawing a red line grid system for testing the movement of the snake
